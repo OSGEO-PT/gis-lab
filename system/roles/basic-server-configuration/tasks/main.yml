@@ -31,19 +31,19 @@
 
 - name: Set GIS.lab worker installation root directory
   set_fact:
-    GISLAB_INSTALL_WORKER_ROOT: "{{ GISLAB_ROOT }}/client-worker/root"
+    GISLAB_INSTALL_WORKER_ROOT: "/storage/gislab/client-worker/root"
 
 - name: Set GIS.lab worker image directory
   set_fact:
-    GISLAB_INSTALL_WORKER_IMAGE: "{{ GISLAB_ROOT }}/client-worker/image"
+    GISLAB_INSTALL_WORKER_IMAGE: "/storage/gislab/client-worker/image"
 
 - name: Set GIS.lab client installation root directory
   set_fact:
-    GISLAB_INSTALL_CLIENT_ROOT: "{{ GISLAB_ROOT }}/client-desktop/root"
+    GISLAB_INSTALL_CLIENT_ROOT: "/storage/gislab/client-desktop/root"
 
 - name: Set GIS.lab client image directory
   set_fact:
-    GISLAB_INSTALL_CLIENT_IMAGE: "{{ GISLAB_ROOT }}/client-desktop/image"
+    GISLAB_INSTALL_CLIENT_IMAGE: "/storage/gislab/client-desktop/image"
 
 
 - name: Detect current date and time
