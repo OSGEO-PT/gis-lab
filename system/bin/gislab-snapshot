@@ -11,14 +11,14 @@ gislab_require_root
 
 # usage
 function usage() {
-	echo "USAGE: $(basename $0) [OPTIONS] [ -l ] [ -c <comment> ] [ -d ] [ -r ]"
+	echo "USAGE: $(basename $0) [OPTIONS] [ -l ] [ -c <comment> ] [ -d <backup> ] [ -r <backup> ]"
 	echo "Backup or restore GIS.lab server system (root filesystem)."
 	echo -e "\nOPTIONS
 	-h  display this help
 	-l  print a list of backups
-	-c  backup system (comment is required, allowed characters [a-zA-Z0-9_-], max 12 chars.)
-	-d  delete backup
-	-r  restore from backup
+	-c  create system backup (comment is required, allowed characters [a-zA-Z0-9_-], max 12 chars.)
+	-d  backup to delete
+	-r  backup to restore from
 	"
 	exit 255
 }
