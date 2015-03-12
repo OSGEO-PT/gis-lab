@@ -31,6 +31,12 @@
   register: ldap_install_status
   changed_when: False
 
+- name: Detect if GIS.lab server is installed
+  shell: test -f /var/lib/gislab/installation.done || echo "SERVER NOT INSTALLED"
+  args:
+    executables: /bin/bash
+  register: server_install_status
+  changed_when: False
 
 # PAM
 - name: Configure PAM to use Unix and LDAP authentication 
@@ -206,6 +212,36 @@
 
 - name: Install LDAP logging configuration
   shell: ldapmodify -Q -Y EXTERNAL -H ldapi:/// -f /tmp/ldap.ldif
+
+
+# Move LDAP database to applications directory
+- name: Stop LDAP database
+  service: name=slapd state=stopped
+  when: server_install_status.stdout == "SERVER NOT INSTALLED"
+
+- name: Move LDAP database to applications directory
+  shell: cp -a /var/lib/ldap /storage/applications/
+  when: server_install_status.stdout == "SERVER NOT INSTALLED"
+
+- name: Remove origin LDAP database directory
+  file: dest=/var/lib/ldap state=absent
+  when: server_install_status.stdout == "SERVER NOT INSTALLED"
+
+- name: Create symlink to new LDAP database directory
+  file: src=/storage/applications/ldap dest=/var/lib/ldap state=link
+  when: server_install_status.stdout == "SERVER NOT INSTALLED"
+
+- name: Allow access for slapd to new LDAP database directory
+  template: src=apparmor/usr.sbin.slapd.j2 dest=/etc/apparmor.d/local/usr.sbin.slapd
+  when: server_install_status.stdout == "SERVER NOT INSTALLED"
+
+- name: Reload apparmor service
+  service: name=apparmor state=reloaded
+  when: server_install_status.stdout == "SERVER NOT INSTALLED"
+
+- name: Start LDAP service
+  service: name=slapd state=started
+  when: server_install_status.stdout == "SERVER NOT INSTALLED"
 
 
 # The end
