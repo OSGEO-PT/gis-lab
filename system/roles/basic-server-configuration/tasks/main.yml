@@ -187,6 +187,14 @@
 - name: Configure Apt cache proxy server
   template: src=apt/02proxy.j2 dest=/etc/apt/apt.conf.d/02proxy
 
+- name: Move apt cache to '/storage'
+  shell: test -h /var/cache/apt || mv -f /var/cache/apt /storage/apt
+  args:
+    executable: /bin/bash
+
+- name: Create symlink to new apt cache directory
+  file: src=/storage/apt dest=/var/cache/apt state=link
+
 - name: Update apt cache
   apt: update_cache=yes
 
