@@ -220,11 +220,7 @@
   when: server_install_status.stdout == "SERVER NOT INSTALLED"
 
 - name: Move LDAP database to applications directory
-  shell: cp -a /var/lib/ldap /storage/applications/
-  when: server_install_status.stdout == "SERVER NOT INSTALLED"
-
-- name: Remove origin LDAP database directory
-  file: dest=/var/lib/ldap state=absent
+  shell: mv -f /var/lib/ldap /storage/applications/
   when: server_install_status.stdout == "SERVER NOT INSTALLED"
 
 - name: Create symlink to new LDAP database directory
